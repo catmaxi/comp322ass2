@@ -5,55 +5,58 @@
 #include "blackjack.h"
 
 #include <iostream>
-#include <vector>
+//#include <vector>
 
 using namespace std;
 
-enum Rank
-{
-  ACE = 1,
-  TWO,
-  THREE,
-  FOUR,
-  FIVE,
-  SIX,
-  SEVEN,
-  EIGHT,
-  NINE,
-  TEN,
-  JACK,
-  QUEEN,
-  KING
-};
-
-enum Type
-{
-  CLUBS,
-  DIAMONDS,
-  HEARTS,
-  SPADES
-};
+//namespace myRank {
+//    enum Rank {
+//        ACE = 1,
+//        TWO,
+//        THREE,
+//        FOUR,
+//        FIVE,
+//        SIX,
+//        SEVEN,
+//        EIGHT,
+//        NINE,
+//        TEN,
+//        JACK,
+//        QUEEN,
+//        KING
+//    };
+////}
+//enum Type {
+//    CLUBS,
+//    DIAMONDS,
+//    HEARTS,
+//    SPADES
+//};
 
 class Card
 {
+  // deck as friend class or not?????
+
 private:
-  Rank rank;
-  Type type;
+  Rank m_rank;
+  Type m_type;
 
 public:
-  Card()
+  Card(Rank pRank, Type pType)
   {
+    this->m_rank = pRank;
+    this->m_type = pType;
   }
 
-  int getValue()
+  int getValue() const
   {
-    return this->rank;
+    return this->m_rank;
   }
 
-  void displayCard()
+  void displayCard() const
   {
     char C;
-    switch (this->type)
+    switch (this->m_type)
     {
     case CLUBS:
       C = 'C';
@@ -76,48 +79,70 @@ public:
 class Hand
 {
 private:
-  vector<int> cards;
+  vector<Card> m_cards;
 
 public:
-  Hand()
+  Hand() : m_cards(){};
+
+  void add(Card pCard)
   {
+    m_cards.push_back(pCard);
+    // not copied before added...
   }
-  void add()
-  {
-  }
+
   void clear()
   {
+    m_cards.clear();
   }
+
   int getTotal()
   {
+    int sum = 0;
+    for (auto e : this->m_cards)
+    {
+      sum += e.getValue();
+    }
+    return sum;
   }
+
+  // void display() const; ????
 };
 
 class Deck
 {
 private:
-  vector<int> cards;
+  vector<int> m_cards;
 
 public:
-  Deck()
-  {
-  }
+  Deck() : m_cards(){};
+
   void Populate()
   {
+    for (int rankInt = ACE; rankInt != KING; rankInt++)
+    {
+      Rank rank_i = static_cast<Rank>(rankInt);
+      for (int typeInt = CLUBS; typeInt != SPADES; typeInt++)
+      {
+        Type type_i = static_cast<Type>(typeInt);
+      }
+    }
   }
+
   void shuffle()
   {
   }
-  void deal()
+
+  void deal(Hand &hand)
   {
   }
 };
 
-class AbstractPlayer
+class AbstractPlayer : public Hand
 {
 public:
   virtual bool isDrawing() const = 0;
-  bool isBusted()
+
+  bool isBusted() const
   {
   }
 };
@@ -125,10 +150,14 @@ public:
 class HumanPlayer : public AbstractPlayer
 {
 private:
+  bool m_isDrawing;
+
 public:
-  virtual bool isDrawing()
+  virtual bool isDrawing() const override
   {
+    return false;
   }
+
   void announce()
   {
   }
@@ -138,7 +167,7 @@ class ComputerPlayer : public AbstractPlayer
 {
 private:
 public:
-  virtual bool isDrawing()
+  virtual bool isDrawing() const override
   {
     return false;
   }
@@ -151,4 +180,7 @@ private:
   ComputerPlayer m_casino;
 
 public:
+  void play()
+  {
+  }
 };
