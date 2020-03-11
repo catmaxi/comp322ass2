@@ -5,6 +5,7 @@
 #include "blackjack.h"
 
 #include <iostream>
+#include <ctime>
 //#include <vector>
 
 using namespace std;
@@ -111,7 +112,7 @@ public:
 class Deck
 {
 private:
-  vector<int> m_cards;
+  vector<Card> m_cards;
 
 public:
   Deck() : m_cards(){};
@@ -124,12 +125,15 @@ public:
       for (int typeInt = CLUBS; typeInt != SPADES; typeInt++)
       {
         Type type_i = static_cast<Type>(typeInt);
+        m_cards.push_back(Card(rank_i, type_i));
       }
     }
   }
 
   void shuffle()
   {
+    srand(time(0));
+    
   }
 
   void deal(Hand &hand)
