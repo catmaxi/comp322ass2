@@ -6,6 +6,7 @@
 #define BLACKJACK_BLACKJACK_H
 
 #include <vector>
+#include <string>
 using namespace std;
 
 enum Rank
@@ -45,6 +46,9 @@ public:
   int getValue() const;
 
   void displayCard() const;
+
+  // Helper methods
+  string toString();
 };
 
 class Hand
@@ -53,15 +57,13 @@ private:
   vector<Card> m_cards;
 
 public:
-  Hand() : m_cards(10){};
+  explicit Hand();
+  //    Hand(vector<Card> mCards);
 
   void add(Card pCard);
-
   void clear();
-
   int getTotal();
-
-  // void display() const; ????
+  void display() const;
 };
 
 class Deck
@@ -70,18 +72,22 @@ private:
   vector<Card> m_cards;
 
 public:
-  Deck() : m_cards(52){};
+  Deck() : m_cards(){};
 
   void Populate();
 
   void shuffle();
 
   void deal(Hand &hand);
+
+  void display() const;
 };
 
 class AbstractPlayer : public Hand
 {
 public:
+  AbstractPlayer();
+
   virtual bool isDrawing() const = 0;
 
   bool isBusted() const;
@@ -93,30 +99,25 @@ private:
   bool m_isDrawing;
 
 public:
-  HumanPlayer()
-  {
-    m_isDrawing = false;
-  }
+  HumanPlayer();
+
   bool isDrawing() const override;
 
   void announce();
 };
 
-class ComputerPlayer : public AbstractPlayer
-{
-private:
-public:
-  virtual bool isDrawing() const override;
-};
-
-class BlackJackGame
-{
-private:
-  Deck m_deck;
-  ComputerPlayer m_casino;
-
-public:
-  void play();
-};
+//class ComputerPlayer : public AbstractPlayer {
+//private:
+//public:
+//    virtual bool isDrawing() const override;
+//};
+//
+//class BlackJackGame {
+//private:
+//    Deck m_deck;
+//    ComputerPlayer m_casino;
+//public:
+//    void play();
+//};
 
 #endif //BLACKJACK_BLACKJACK_H
