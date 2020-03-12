@@ -68,7 +68,7 @@ void Card::displayCard() const
   cout << R << T << endl;
 }
 
-string Card::toString()
+string Card::toString() const
 {
   string R;
   int rInt = this->getValue();
@@ -127,7 +127,7 @@ void Hand::clear()
   m_cards.clear();
 }
 
-int Hand::getTotal()
+int Hand::getTotal() const
 {
   int sum = 0;
   for (auto e : this->m_cards)
@@ -146,6 +146,17 @@ void Hand::display() const
   }
   str += "}";
   cout << str << endl;
+}
+
+string Hand::toString() const
+{
+  string str;
+  for (auto &e : m_cards)
+  {
+    str += e.toString();
+    str += " ";
+  }
+  return str;
 }
 
 void Deck::Populate()
@@ -205,10 +216,42 @@ void HumanPlayer::announce()
 
 HumanPlayer::HumanPlayer() : m_isDrawing(false) {}
 
-//bool ComputerPlayer::isDrawing() const {
-//    return false;
-//}
-//
-//void BlackJackGame::play() {
-//
-//}
+void HumanPlayer::displayPlayer()
+{
+  string str = "Player: ";
+  str += this->toString();
+  str += "[" + to_string(this->getTotal()) + "]";
+  cout << str << endl;
+}
+
+bool ComputerPlayer::isDrawing() const
+{
+  return false;
+}
+
+void ComputerPlayer::displayPlayer() const
+{
+  string str = "Casino: ";
+  str += this->toString();
+  str += "[" + to_string(this->getTotal()) + "]";
+  cout << str << endl;
+}
+
+void BlackJackGame::play()
+{
+  cout << "The game is starting..." << endl;
+
+  Deck deck;
+  deck.Populate();
+  deck.shuffle();
+
+  ComputerPlayer CP;
+  deck.deal(CP);
+  CP.displayPlayer();
+
+  HumanPlayer player;
+  deck.deal(player);
+  deck.deal(player);
+
+  player.displayPlayer();
+}

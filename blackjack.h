@@ -48,7 +48,7 @@ public:
   void displayCard() const;
 
   // Helper methods
-  string toString();
+  string toString() const;
 };
 
 class Hand
@@ -62,8 +62,10 @@ public:
 
   void add(Card pCard);
   void clear();
-  int getTotal();
+  int getTotal() const;
   void display() const;
+
+  string toString() const;
 };
 
 class Deck
@@ -104,20 +106,26 @@ public:
   bool isDrawing() const override;
 
   void announce();
+
+  void displayPlayer();
 };
 
-//class ComputerPlayer : public AbstractPlayer {
-//private:
-//public:
-//    virtual bool isDrawing() const override;
-//};
-//
-//class BlackJackGame {
-//private:
-//    Deck m_deck;
-//    ComputerPlayer m_casino;
-//public:
-//    void play();
-//};
+class ComputerPlayer : public AbstractPlayer
+{
+private:
+public:
+  bool isDrawing() const override;
+  void displayPlayer() const;
+};
+
+class BlackJackGame
+{
+private:
+  Deck m_deck;
+  ComputerPlayer m_casino;
+
+public:
+  void play();
+};
 
 #endif //BLACKJACK_BLACKJACK_H
