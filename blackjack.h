@@ -65,7 +65,9 @@ public:
   int getTotal() const;
   void display() const;
 
+  // Helper functions
   string toString() const;
+  int getNumberAces() const;
 };
 
 class Deck
@@ -95,27 +97,27 @@ public:
   bool isBusted() const;
 };
 
-class HumanPlayer : public AbstractPlayer
-{
-private:
-  bool m_isDrawing;
-
-public:
-  HumanPlayer();
-
-  bool isDrawing() const override;
-
-  void announce();
-
-  void displayPlayer();
-};
-
 class ComputerPlayer : public AbstractPlayer
 {
 private:
 public:
   bool isDrawing() const override;
   void displayPlayer() const;
+};
+
+class HumanPlayer : public AbstractPlayer
+{
+private:
+  bool m_isBusted;
+
+public:
+  HumanPlayer();
+
+  bool isDrawing() const override;
+
+  void announce(const ComputerPlayer &casino);
+
+  void displayPlayer();
 };
 
 class BlackJackGame

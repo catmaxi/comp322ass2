@@ -132,7 +132,20 @@ int Hand::getTotal() const
   int sum = 0;
   for (auto e : this->m_cards)
   {
-    sum += e.getValue();
+    int value = e.getValue();
+    if (value == 1)
+    {
+      sum += 11;
+    }
+    else
+    {
+      sum += value;
+    }
+  }
+  int num = this->getNumberAces();
+  if (sum > 21)
+  {
+    sum -= num * 10;
   }
   return sum;
 }
@@ -157,6 +170,19 @@ string Hand::toString() const
     str += " ";
   }
   return str;
+}
+
+int Hand::getNumberAces() const
+{
+  int num = 0;
+  for (auto const &c : m_cards)
+  {
+    if (c.getValue() == 1)
+    {
+      num++;
+    }
+  }
+  return num;
 }
 
 void Deck::Populate()
@@ -200,21 +226,48 @@ void Deck::display() const
 
 bool AbstractPlayer::isBusted() const
 {
-  return false;
+  return this->getTotal() > 21;
 }
 
 AbstractPlayer::AbstractPlayer() {}
 
 bool HumanPlayer::isDrawing() const
 {
-  return m_isDrawing;
+  cout << "Do you want to draw? (y/n):";
+  char answer;
+  cin >> answer;
+  bool drawAgain = (answer == 'y');
+  //    m_isDrawing = drawAgain;
+  return drawAgain;
 }
 
-void HumanPlayer::announce()
+void HumanPlayer::announce(const ComputerPlayer &casino)
 {
+  if (this->isBusted())
+  {
+    cout << "Player busts." << endl;
+    cout << "Casino wins." << endl;
+  }
+  else if (casino.isBusted())
+  {
+    cout << "Casino busts." << endl;
+    cout << "Player wins." << endl;
+  }
+  else if (this->getTotal() == casino.getTotal())
+  {
+    cout << "Push: No one wins." << endl;
+  }
+  else if (this->getTotal() > casino.getTotal())
+  {
+    cout << "Player wins." << endl;
+  }
+  else if (this->getTotal() < casino.getTotal())
+  {
+    cout << "Casino wins." << endl;
+  }
 }
 
-HumanPlayer::HumanPlayer() : m_isDrawing(false) {}
+HumanPlayer::HumanPlayer() : m_isBusted(false) {}
 
 void HumanPlayer::displayPlayer()
 {
@@ -226,7 +279,7 @@ void HumanPlayer::displayPlayer()
 
 bool ComputerPlayer::isDrawing() const
 {
-  return false;
+  return this->getTotal() <= 16;
 }
 
 void ComputerPlayer::displayPlayer() const
@@ -239,19 +292,47 @@ void ComputerPlayer::displayPlayer() const
 
 void BlackJackGame::play()
 {
-  cout << "The game is starting..." << endl;
+  //    cout << "The game is starting..." << endl;
 
   Deck deck;
   deck.Populate();
   deck.shuffle();
 
-  ComputerPlayer CP;
-  deck.deal(CP);
-  CP.displayPlayer();
+  ComputerPlayer casino;
+  deck.deal(casino);
+  casino.displayPlayer();
 
   HumanPlayer player;
   deck.deal(player);
   deck.deal(player);
-
   player.displayPlayer();
+
+  bool playEnded = false;
+  while (player.isDrawing())
+  {
+    deck.deal(player);
+    player.displayPlayer();
+
+    if (player.isBusted())
+      break;
+  }
+
+  if (player.isBusted())
+  {
+    player.announce(casino);
+  }
+  else
+  {
+    while (casino.isDrawing())
+    {
+      deck.deal(casino);
+      casino.displayPlayer();
+      if (casino.isBusted())
+      {
+        break;
+      }
+    }
+
+    player.announce(casino);
+  }
 }
