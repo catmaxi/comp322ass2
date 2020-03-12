@@ -21,19 +21,28 @@ Card::Card(Rank pRank, Type pType)
 
 int Card::getValue() const
 {
-  return this->m_rank;
+  //    return this->m_rank;
+  if (m_rank <= 10)
+  {
+    return m_rank;
+  }
+  else
+  {
+    return 10;
+  }
 }
 
 void Card::displayCard() const
 {
   string R;
-  int rInt = this->getValue();
-  if (rInt <= 10)
+  int rInt = this->m_rank;
+  if (m_rank <= 10)
   {
     R = to_string(rInt);
   }
   else
   {
+    cout << "big card" << endl;
     switch (rInt)
     {
     case 11:
@@ -71,7 +80,7 @@ void Card::displayCard() const
 string Card::toString() const
 {
   string R;
-  int rInt = this->getValue();
+  int rInt = this->m_rank;
   if (rInt <= 10)
   {
     R = to_string(rInt);
