@@ -53,7 +53,7 @@ private:
   vector<Card> m_cards;
 
 public:
-  Hand() : m_cards(){};
+  Hand() : m_cards(10){};
 
   void add(Card pCard);
 
@@ -67,10 +67,10 @@ public:
 class Deck
 {
 private:
-  vector<int> m_cards;
+  vector<Card> m_cards;
 
 public:
-  Deck() : m_cards(){};
+  Deck() : m_cards(52){};
 
   void Populate();
 
@@ -93,7 +93,11 @@ private:
   bool m_isDrawing;
 
 public:
-  virtual bool isDrawing() const override;
+  HumanPlayer()
+  {
+    m_isDrawing = false;
+  }
+  bool isDrawing() const override;
 
   void announce();
 };
