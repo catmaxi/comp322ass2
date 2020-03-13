@@ -1,3 +1,9 @@
+//
+// Created by wenxu on 3/10/2020.
+// Name: Wen Xuan Wu
+// Student ID: 260929786
+//
+
 #include <iostream>
 #include "blackjack.h"
 
