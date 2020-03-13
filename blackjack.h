@@ -63,9 +63,9 @@ public:
   void add(Card pCard);
   void clear();
   int getTotal() const;
-  void display() const;
 
   // Helper functions
+  void display() const;
   string toString() const;
   int getNumberAces() const;
 };
@@ -81,9 +81,10 @@ public:
   void Populate();
 
   void shuffle();
-
+  // This functions deals a card to the hand.
   void deal(Hand &hand);
 
+  // helper methods
   void display() const;
 };
 
@@ -102,6 +103,8 @@ class ComputerPlayer : public AbstractPlayer
 private:
 public:
   bool isDrawing() const override;
+
+  // helper function
   void displayPlayer() const;
 };
 
@@ -115,8 +118,10 @@ public:
 
   bool isDrawing() const override;
 
+  // This function takes the computer player to check and announce if anyone won or if it's a push.
   void announce(const ComputerPlayer &casino);
 
+  // helper function
   void displayPlayer();
 };
 
@@ -127,6 +132,7 @@ private:
   ComputerPlayer m_casino;
 
 public:
+  // This functions serves to play the game once and deals with all the logistics and loops of playing the game once.
   void play();
 };
 
