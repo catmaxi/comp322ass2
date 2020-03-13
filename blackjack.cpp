@@ -196,6 +196,7 @@ int Hand::getNumberAces() const
 
 void Deck::Populate()
 {
+  m_cards.clear();
   for (int rankInt = ACE; rankInt != KING + 1; rankInt++)
   {
     Rank rank_i = static_cast<Rank>(rankInt);
@@ -238,7 +239,7 @@ bool AbstractPlayer::isBusted() const
   return this->getTotal() > 21;
 }
 
-AbstractPlayer::AbstractPlayer() {}
+AbstractPlayer::AbstractPlayer() = default;
 
 bool HumanPlayer::isDrawing() const
 {
@@ -246,7 +247,6 @@ bool HumanPlayer::isDrawing() const
   char answer;
   cin >> answer;
   bool drawAgain = (answer == 'y');
-  //    m_isDrawing = drawAgain;
   return drawAgain;
 }
 
@@ -301,47 +301,50 @@ void ComputerPlayer::displayPlayer() const
 
 void BlackJackGame::play()
 {
-  //    cout << "The game is starting..." << endl;
+  // Instantiate the deck and populate it and shuffle it.
+  m_deck.Populate();
+  m_deck.shuffle();
 
-  Deck deck;
-  deck.Populate();
-  deck.shuffle();
+  // clear the casino hand
+  m_casino.clear();
 
-  ComputerPlayer casino;
-  deck.deal(casino);
-  casino.displayPlayer();
+  // Create the computer player and deal it one card and then display it
+  m_deck.deal(m_casino);
+  m_casino.displayPlayer();
 
+  // Create the player and deal it 2 cards and then display it.
   HumanPlayer player;
-  deck.deal(player);
-  deck.deal(player);
+  m_deck.deal(player);
+  m_deck.deal(player);
   player.displayPlayer();
 
-  bool playEnded = false;
+  // Start the player's playing loop.
   while (player.isDrawing())
   {
-    deck.deal(player);
+    m_deck.deal(player);
     player.displayPlayer();
 
     if (player.isBusted())
       break;
   }
 
+  // Check if the player is busted
   if (player.isBusted())
   {
-    player.announce(casino);
+    player.announce(m_casino);
   }
   else
   {
-    while (casino.isDrawing())
+    // If not busted then its computer's turn to play.
+    while (m_casino.isDrawing())
     {
-      deck.deal(casino);
-      casino.displayPlayer();
-      if (casino.isBusted())
+      m_deck.deal(m_casino);
+      m_casino.displayPlayer();
+      if (m_casino.isBusted())
       {
         break;
       }
     }
-
-    player.announce(casino);
+    player.announce(m_casino);
   }
 }

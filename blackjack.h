@@ -58,7 +58,6 @@ private:
 
 public:
   explicit Hand();
-  //    Hand(vector<Card> mCards);
 
   void add(Card pCard);
   void clear();
@@ -100,7 +99,6 @@ public:
 
 class ComputerPlayer : public AbstractPlayer
 {
-private:
 public:
   bool isDrawing() const override;
 
